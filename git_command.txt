@@ -1,0 +1,124 @@
+CLI version management
+.git : repository 생성
+git init . : 해당 폴더에 버전관리 시작
+====================================================
+-용어정리(동영상 https://youtu.be/tP_Q_o8KOUA?list=PLuHgQVnccGMATJK16UJ9Fjay0ozrSZKiI&t=3, 
+		https://youtu.be/MXz7Z-Heipc?list=PLuHgQVnccGMATJK16UJ9Fjay0ozrSZKiI&t=4)
+ Working tree : 수정한 파일이 있는 곳
+ Staging Area : 버전을 만들려는 파일들이 있는 곳
+ Repository : 만들어 진 버전(commit)
+====================================================
+
+<버전생성 단계>
+git status 명령의 출력 유형 및 다음 단계를 위한 명령들
+1. Working tree 단계
+  1.1 출력유형 (이경우 git add관련 명령을 실행하여 Stagint Area 단계로 진입)
+    - No commits yet : 버전관리 이전 임(즉 Staging Area단계로 이동을 위한 명령(git add 관련 명령 실행 필요)
+	Untracked files: 새로운 file이 발견됨
+	Changes not staged for commit: 이미 commit된 파일이지만 변경됨
+  1.2 Staging Area 단계로의 진행명령 (git add관련 명령을 실행)
+        - git add file_name: 특정 file을 add한다
+	- git add . : 현재 디렉토리에 있는 모든 파일을 add한다
+	- git add 디렉토리명 : 이 디렉토리에 있는 모든 파일을 add한다
+
+
+2. Staging Area 단계(git add관련 명령을 수행후 출력내용)
+  2.1 출력유형
+        - Changes to be committed: commit 대기상태를 의미
+  2.2 Repository 단계로 진행명령
+        - git commit : 에디터에서 직접 commit 내용 작성
+	- git config --global core.editor "nano" : 에디터 변경 명령 ex)"nano"에디터를 사용 할 경우
+	- git commit -m "commit 내용" : 버전관리 상태로(cml에 직접 commit내용 작성)
+	- git commit -am "commit 내용" : add를 생략하고 바로 번전관리 상태로 (단, 처음 생성한 파일(untracked file)은 반드시 git add과정을 거쳐야 한다)
+	- git commit --amend : 직전 commit 메세지 수정
+
+2. Repository Area 단계(버전생성 완료)
+  2.1 출력유형
+        - nothing to commit, working tree clean:
+
+=====================================================================================================================================================
+
+<버전생성후 명령>
+동영상 : https://youtu.be/CysL6y8GPV4?list=PLuHgQVnccGMATJK16UJ9Fjay0ozrSZKiI&t=18
+git log : 버전상태 확인..(master)
+git log --stat : 버전의 상세 상태 확인
+git log --all --graph --oneline : 그래프가 포함된 버전 표시
+git diff : Show changens
+git reset --hard : 최종 commit전 상태로 되롤리기
+git reset --hard commit ID : 해당 commit ID 버전으로 reset
+git revert commit ID : 해당 commit ID 바로 전 버전으로 변경되는 것관 같은 결과(이 경우 새로운 버전이 생긴다)
+git log -p : 번전관리 상세, 차이점 보기
+
+<checkout - head를 옮긴다>
+YouTube : https://youtu.be/9agkT0HAFho?list=PLuHgQVnccGMATJK16UJ9Fjay0ozrSZKiI&t=183
+git checkout commit ID : 해당 버전으로 이동
+git checkout master : master 브랜치로으로 이동
+
+<reset : 브랜치를 옮긴다>
+YouTube : https://youtu.be/8npBGfy47y0?list=PLuHgQVnccGMDU5eAzOz2dZ9KXJF6dkNg3
+
+.gitignore : 버전관리 제외하고 싶은 경우
+
+tag : 버전의 이름을 붙여서 관리 용이
+
+
+
+====CLI 원격저장소와 연결=====================================================
+원격저장소의 별명은 origin, 브랜치는 master, 원격repository는 git_ex 생성
+
+1. CLI backup
+지역저장소에서 작업한 내용(commit)을 원격저장소에 백업하는 과정
+YouTube : https://youtu.be/fK87Jx3QYJY?list=PLuHgQVnccGMBJr3eVXGvYHDvGNcogEy7v&t=120
+  1.1 전제조건
+    -지역저장소(.git 폴더 존재, commit 완료) -> 원격repository (github.com)
+  1.2 명령어(양자 택일)
+   1.2.1 git remote add origin https://github.com/jknami/git_ex.git(https로 접속할 때)
+   1.2.2 git remote add origin git@github.com:jknami/git_ex.git(ssh로 접속할 때)
+  2. 원경저장 상태 확인
+   git remote [-v]: -v(저장소 확인 옵션)
+  3. 원격저장소에 upload
+    git push --set-upstream origin master : origin(원격저장소)은 master브랜치에 접속한다. 
+    이 옵션설정 후, 다음부터 git push 만 사용해도 master브랜치에 push하게 된다.
+    (처음 접속하는 pc의 경우 github.com의 이메일과 비밀번호를 물어본다.)
+
+2. CLI 복제/복원
+원격저장소에 있는 소스를 모두 다른 pc(다른 저장소)로 복제(내려받기)
+YouTube : https://youtu.be/K6ZW--eP3ec?list=PLuHgQVnccGMBJr3eVXGvYHDvGNcogEy7v&t=195
+  2.1 원격저장소(github.com) -> 다른 pc의 저장소(아무것도 없는 상태)
+  2.2 명령어(양자택일)
+    2.2.1 git clone https://github.com/jknami/git_ex.git [원하는 디렉토리명-> 생략하면 해당디렉토리에 원격저장소 이름으로 자동생성](https접속)
+    2.2.2 git clone git@github.com:jknami/git_ex.git(ssh접속)
+
+
+3. ssh 연결을 위한 우선 설정
+YouTube : https://youtu.be/78rykXw9_0g
+  3.1. cmd나 git bash에서 ssh-keygen 입력
+  3.2. key 저장위치와 파일 확인
+  예)Enter file in which to save the key (/c/Users/jknam_home/.ssh/id_rsa):
+    Your identification has been saved in /c/Users/jknam_home/.ssh/id_rsa
+    Your public key has been saved in /c/Users/jknam_home/.ssh/id_rsa.pub
+  3.3. id_rsa(private key는 내 pc), id_rsa.pub(public key는 원격서버에 저장)
+  3.3. id_rsa.pub 내용을 복사
+  3.4. 서버 (예 : github)->settings -> SSh and GPG keys -> NEW SSH key -> id_rsa.pub 내용 붙여넣기
+========================================================================================
+
+
+
+
+CLI 브랜치 & 충돌
+git branch : branch목록보기
+git branch 이름 : branch 만들기
+git checkout branch명 : 해당 branch로 이동
+git branch -D [branch명] : 해당 branch 삭제
+git log --all --graph --oneline
+
+
+git merge 대상 branch : 현상태의 branch와 병합
+
+git reflog : 모든 log확인가능
+
+
+
+<branch>
+git branch 현재 branch 확인
+git branch [원하는 branch]
